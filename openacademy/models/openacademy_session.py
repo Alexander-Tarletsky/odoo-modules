@@ -15,7 +15,14 @@ class Session(models.Model):
 
     start_date = fields.Date(
         string='Start Date',
-        default=lambda self: fields.datetime.now(),
+        default=lambda self: fields.Date.today(),
+    )
+
+    end_date = fields.Date(
+        string='End Date',
+        compute='_compute_end_date',
+        inverse='_inverse_end_date',
+        store=True,
     )
 
     seats = fields.Integer(string='Seats', required=True, default=10)
@@ -52,13 +59,6 @@ class Session(models.Model):
     taken_percentage = fields.Float(
         string='Occipied places',
         compute='_compute_taken_percentage',
-        store=True,
-    )
-
-    end_date = fields.Date(
-        string='End Date',
-        compute='_compute_end_date',
-        inverse='_inverse_end_date',
         store=True,
     )
 

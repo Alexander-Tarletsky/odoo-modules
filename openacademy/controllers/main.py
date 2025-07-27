@@ -6,7 +6,7 @@ from odoo.http import request, Response
 
 
 class CourseController(http.Controller):
-    @http.route('/openacademy/courses', type='http', auth='public', method=['GET'])
+    @http.route('/openacademy/courses', type='http', auth='public', methods=['GET'])
     def get_courses(self, title=None, start_date=None, available_seats=None, **kwargs):
         headers = {'Content-Type': 'application/json'}
         domain_course = []
@@ -52,7 +52,7 @@ class CourseController(http.Controller):
         type='http',
         auth='public',
         website=True,
-        method=['GET']
+        methods=['GET']
     )
     def display_courses(self, **kwargs):
         if request.env.user.login == 'public':
@@ -78,7 +78,7 @@ class CourseController(http.Controller):
         '/openacademy/sessions/<int:session_id>/add_listener',
         type='json',
         auth='user',
-        method=['POST'],
+        methods=['POST'],
     )
     def add_attendees(self, session_id=None, **kwargs):
         session = request.env['openacademy.session'].search([['id', '=', session_id]])
@@ -96,7 +96,7 @@ class CourseController(http.Controller):
                 "error": "You do not have access rights to modify sessions!",
             }
 
-        data = request.jsonrequest
+        data = request.get_json_data()
         if 'name' not in data:
             return {
                 "status": "failed",

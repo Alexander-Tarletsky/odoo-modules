@@ -1,12 +1,13 @@
 {
-    'name': "Open Academy",
-    'summary': "Open Academy module for managing trainings",
+    'name': 'Open Academy',
+    'summary': 'Open Academy module for managing trainings',
+ 
+    'author': 'Alexander Tarletsky',
+    'website': 'https://github.com/Alexander-Tarletsky/odoo-modules',
+    'license': 'LGPL-3',
 
-    'author': "Alexander Tarletsky",
-    'website': "https://ventor.tech/",
-
-    'category': 'Test',
-    'version': '14.0.0.9.0',
+    'category': 'Training',
+    'version': '18.0.1.0.0',
 
     'depends': ['base', 'board', 'web', 'mail'],
 

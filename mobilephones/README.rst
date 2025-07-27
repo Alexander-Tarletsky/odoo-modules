@@ -1,1 +1,1 @@
-This is a test module "Mobile Phones".
+This is a training module "Mobile Phones".

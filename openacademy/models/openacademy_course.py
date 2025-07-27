@@ -38,11 +38,11 @@ class Course(models.Model):
         copy=False,
     )
 
-    price = fields.Float(
+    price = fields.Monetary(
         string="Price of Course",
         default=0,
         currency_field='currency_id',
-        company_dependent=True,
+        # company_dependent=True,
     )
 
     currency_id = fields.Many2one(

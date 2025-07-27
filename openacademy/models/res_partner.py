@@ -8,13 +8,13 @@ class ResPartner(models.Model):
 
     session_ids = fields.Many2many(
         comodel_name='openacademy.session',
-        string='Sessions',
+        string='Openacademy Sessions',
     )
 
     instructed_session_ids = fields.One2many(
         comodel_name='openacademy.session',
         inverse_name='instructor_id',
-        string='Sessions',
+        string='Instructed Sessions',
     )
 
     company_id = fields.Many2one(
@@ -35,8 +35,8 @@ class ResPartner(models.Model):
         return res
 
     @api.model_create_multi
-    def create(self, vals):
-        instructor = super(ResPartner, self).create(vals)
+    def create(self, vals_list):
+        instructor = super(ResPartner, self).create(vals_list)
         instructor.update_instructor_tag()
         return instructor
 
