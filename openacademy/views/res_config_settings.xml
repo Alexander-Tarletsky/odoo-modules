@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+        <!-- Settings -->
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">Settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" string="Open Academy" data-string="Openacademy" data-key="Openacademy" groups="openacademy.openacademy_manager_group">
+                        <h2>General</h2>
+
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div>
+                                    <div class="o_setting_left_pane">
+                                        <field name="company_is_open"/>
+                                    </div>
+                                    <div class="o_setting_right_pane">
+                                        <label for="company_is_open"/>
+                                        <div class="text-muted">
+                                        Change this value to close/open OA Company and allow participants to sign up for sessions.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div>
+                                    <div class="o_setting_right_pane">
+                                        <label for="default_responsible_id" class="o_form_label d-block"/>
+                                        <field name="default_responsible_id"/>
+                                        <div class="text-muted">
+                                        Set global default responsible.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="openacademy_configs_action" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : "Openacademy"}</field>
+        </record>
+
+        <menuitem id="openacademy_settings_menu" name="Settings" parent="openacademy_base_menu"
+                  sequence="37" action="openacademy_configs_action" />
+
+    </data>
+</odoo>

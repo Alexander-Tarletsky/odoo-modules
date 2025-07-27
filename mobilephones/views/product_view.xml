@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+        <!-- View -->
+
+        <!-- Mixin Views into product.template-->
+        <record id="mobilephones_product_view_form" model="ir.ui.view" >
+            <field name="name">Mobile Phones product view form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Mobile Phone">
+                        <group>
+                            <field name="manufacturer_id"/>
+                            <field name="model_id" />
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mobilephones_product_view_search" model="ir.ui.view">
+            <field name="name">Mobile Phones product search</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <filter string="Only Phones" name="only_phones" domain="[('model_id', '!=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Manufacturer" name="manufacturer" context="{'group_by':'manufacturer_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- Actions -->
+        <record id="product_list_action" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"active_test": False, "search_default_only_phones": 1}</field>
+        </record>
+
+        <!-- Menus -->
+        <menuitem id="mobilephones_base_menu" name="Mobile Phones"/>
+        <menuitem id="mobilephones_product_menu" name="Products" parent="mobilephones_base_menu"
+                  action="product_list_action" sequence="1"/>
+    </data>
+</odoo>

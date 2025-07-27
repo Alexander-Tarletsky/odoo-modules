@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="courses_details_page" name="Courses Details">
+            <t t-call="website.layout">
+                <div class="oe_structure">
+                    <div class="container">
+                        <h3 class="mt-4">Courses Details</h3>
+
+                        <table class="table table-hover mb-4">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="font-size: 25px;" rowspan="2" class="align-middle">Course</th>
+                                    <th style="font-size: 20px;" colspan="4" class="text-center">Sessions</th>
+                                </tr>
+                                <tr>
+                                    <th>Start date</th>
+                                    <th>Duration</th>
+                                    <th>Available seats</th>
+                                    <th>Instructor</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-foreach="queryset['data']" t-as="course">
+                                    <t t-foreach="course['sessions']" t-as="session">
+                                        <t t-set="available_seats" t-value="session['seats']-session['number_attendees']"/>
+                                        <tr>
+                                            <td t-att-rowspan="session_size" t-if="session_first">
+                                                <span t-esc="course['title']"/>
+                                            </td>
+                                            <td><span t-esc="session['start_date']"/></td>
+                                            <td><span t-esc="session['duration']"/></td>
+                                            <td><span t-esc="available_seats"/></td>
+                                            <td><span t-esc="session['instructor']"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

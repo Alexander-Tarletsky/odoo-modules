@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Views -->
+        <record id="model_view_tree" model="ir.ui.view">
+            <field name="name">Model List</field>
+            <field name="model">mobilephones.model</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="title"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="model_view_form" model="ir.ui.view">
+            <field name="name">Model Form</field>
+            <field name="model">mobilephones.model</field>
+            <field name="arch" type="xml">
+                <form string="Model Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="active"/>
+                                <field name="title"/>
+                                <field name="manufacturer_id"/>
+                            </group>
+                            <group>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Properties">
+                                <group>
+                                    <field name="property_ids" widget="many2many_tags"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mobilephones_model_view_search" model="ir.ui.view">
+            <field name="name">Mobile Phones model search</field>
+            <field name="model">mobilephones.model</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="title"/>
+                    <field name="description"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Manufacturer" name="manufacturer" context="{'group_by':'manufacturer_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="model_list_action" model="ir.actions.act_window">
+            <field name="name">Model</field>
+            <field name="res_model">mobilephones.model</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"active_test": False}</field>
+        </record>
+
+        <!-- Menus -->
+        <menuitem id="model_menu" name="Models" parent="mobilephones_configuration_menu"
+                  action="model_list_action" sequence="2"/>
+    </data>
+</odoo>

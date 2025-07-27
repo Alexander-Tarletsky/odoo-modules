@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="property_android" model="mobilephones.property">
+            <field name="title">AndroidOS</field>
+            <field name="description">
+                Android - это операционная система для мобильных/настольных ПК, основанная на модифицированной версии ядра Linux и другого программного обеспечения с открытым исходным кодом, разработанная в первую очередь для мобильных устройств с сенсорным экраном, таких как смартфоны и планшеты.
+            </field>
+        </record>
+        <record id="property_ios" model="mobilephones.property">
+            <field name="title">iOS</field>
+            <field name="description">
+                iOS (ранее iPhone OS) - мобильная операционная система, созданная и разработанная Apple Inc. исключительно для своего оборудования. Это операционная система, на которой работают многие мобильные устройства компании, включая iPhone и iPod Touch.
+            </field>
+        </record>
+        <record id="property_microsd" model="mobilephones.property">
+            <field name="title">MicroSD</field>
+            <field name="description">
+                MicroSD – это самый компактный вариант карт памяти SD, которые также иногда называют «флешками».
+            </field>
+        </record>
+        <record id="property_nanosim" model="mobilephones.property">
+            <field name="title">Nano-SIM</field>
+            <field name="description">
+                Nano—sim – это самый новый формат сим-карт, и на сегодняшний день представляет собой наименьший размер сим-карты для смартфонов и планшетов.
+            </field>
+        </record>
+        <record id="property_wifi" model="mobilephones.property">
+            <field name="title">Wi-Fi-802.11a/b/g/n/ac</field>
+            <field name="description">
+                поддержка четырех (основных) режимов работы беспроводной сети Wi-Fi802.11.
+            </field>
+        </record>
+        <record id="property_bluetooth5" model="mobilephones.property">
+            <field name="title">Bluetooth-5.0</field>
+            <field name="description">поддержка Bluetooth 5.0</field>
+        </record>
+    </data>
+</odoo>

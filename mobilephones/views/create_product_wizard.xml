@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Wizards -->
+        <record id="create_product_wizard_view_form" model="ir.ui.view">
+            <field name="name">create_product_wizard_form</field>
+            <field name="model">mobilephones.create_product_wizard</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="multi_step_wizard.multi_step_wizard_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//footer" position="before">
+                    <group name="start" attrs="{'invisible': [('state', '!=', 'start')]}">
+                        <group>
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="categ_id"/>
+                            <field name="purchase_ok"/>
+                            <field name="sale_ok"/>
+                            <field name="default_code"/>
+                            <field name="manufacturer_id"/>
+                            <field name="model_id"/>
+                        </group>
+                    </group>
+                    <group name="configure" attrs="{'invisible': [('state', '!=', 'final')]}">
+                        <group>
+                            <field name="image_1920" widget="image"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//footer/div" position="after">
+                    <button
+                        name="create_product"
+                        string="Create"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'final')]}"
+                    />
+                </xpath>
+            </field>
+        </record> 
+
+        <!-- Actions -->
+        <record id="launch_create_product_wizard" model="ir.actions.act_window">
+            <field name="name">Mobile Phone: Quickly create a product</field>
+            <field name="res_model">mobilephones.create_product_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="mobilephones_catalog_menu" name="Catalog" parent="sale.sale_menu_root" />
+        <menuitem id="mobilephones_create_product_menu" name="Quick Create Product"
+                  parent="mobilephones_catalog_menu" action="launch_create_product_wizard"/>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_manufacturer_user,access.manufacturer.user,model_mobilephones_manufacturer,mobilephones_user_group,1,0,0,0
+access_manufacturer_seller,access.manufacturer.seller,model_mobilephones_manufacturer,mobilephones_seller_group,1,1,0,0
+access_manufacturer_manager,access.manufacturer.manager,model_mobilephones_manufacturer,mobilephones_manager_group,1,1,1,1
+access_model_user,access.model.user,model_mobilephones_model,mobilephones_user_group,1,0,0,0
+access_model_seller,access.model.seller,model_mobilephones_model,mobilephones_seller_group,1,1,0,0
+access_model_manager,access.model.manager,model_mobilephones_model,mobilephones_manager_group,1,1,1,1
+access_property_user,access.property.user,model_mobilephones_property,mobilephones_user_group,1,0,0,0
+access_property_seller,access.property.seller,model_mobilephones_property,mobilephones_seller_group,1,1,0,0
+access_property_manager,access.property.manager,model_mobilephones_property,mobilephones_manager_group,1,1,1,1
+access_create_product_wizard_user,access.create_product_wizard.user,model_mobilephones_create_product_wizard,mobilephones_user_group,1,0,0,0
+access_create_product_wizard_seller,access.create_product_wizard.seller,model_mobilephones_create_product_wizard,mobilephones_seller_group,1,0,0,0
+access_create_product_wizard_manager,access.create_product_wizard.manager,model_mobilephones_create_product_wizard,mobilephones_manager_group,1,1,1,1
