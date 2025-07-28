@@ -9,7 +9,7 @@
     'category': 'Training',
     'version': '18.0.1.0.0',
 
-    'depends': ['base', 'board', 'web', 'mail'],
+    'depends': ['base', 'board', 'web', 'mail', 'multi_step_wizard'],
 
     'data': [
         'security/groups.xml',
@@ -21,7 +21,7 @@
         'views/add_attendee_wizard.xml',
         'views/sessions_boards.xml',
         'views/course_templates.xml',
-        'views/res_config_settings.xml',
+        # 'views/res_config_settings.xml',
         'data/partner_category_data.xml',
         'data/ir_crons.xml',
         'data/session_data.xml',

@@ -57,7 +57,7 @@ class Course(models.Model):
         (
             'title_unique',
             'UNIQUE(title)',
-            _("The course title must be unique")
+            "The course title must be unique"
         ),
     ]
 
