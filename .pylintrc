@@ -69,7 +69,8 @@ disable=bad-continuation, # TODO: enable after issue will be solved https://gith
         no-utf8-coding-comment, # We used only Python 3.x
         license-allowed, # License not only free
         missing-manifest-dependency, # https://github.com/OCA/pylint-odoo/issues/242
-        dangerous-filter-wo-user
+        dangerous-filter-wo-user,
+        model-name-singular, # Standard Odoo models like res.users should remain plural
 
 [REPORTS]
 

@@ -1,4 +1,4 @@
-from odoo import fields, models, _
+from odoo import api, fields, models, _
 
 
 class Course(models.Model):
@@ -38,11 +38,13 @@ class Course(models.Model):
         copy=False,
     )
 
+    # Replace direct price field with computed field
     price = fields.Monetary(
         string="Price of Course",
-        default=0,
+        compute='_compute_price',
+        inverse='_inverse_price',
+        store=True,
         currency_field='currency_id',
-        # company_dependent=True,
     )
 
     currency_id = fields.Many2one(
@@ -53,6 +55,21 @@ class Course(models.Model):
         default=lambda self: self._get_company().currency_id.id,
     )
 
+    # Add company_id field for better company isolation
+    company_id = fields.Many2one(
+        comodel_name='res.company',
+        string='Company',
+        default=lambda self: self._get_company(),
+        required=True,
+    )
+
+    # Add One2many relationship to course prices
+    course_price_ids = fields.One2many(
+        comodel_name='openacademy.course.price',
+        inverse_name='course_id',
+        string='Course Prices by Company',
+    )
+
     _sql_constraints = [
         (
             'title_unique',
@@ -60,6 +77,35 @@ class Course(models.Model):
             "The course title must be unique"
         ),
     ]
+
+    @api.depends('company_id', 'course_price_ids.price')
+    def _compute_price(self):
+        """Compute price based on company-specific pricing"""
+        for course in self:
+            company = course.company_id or self._get_company()
+            price_record = course.course_price_ids.filtered(
+                lambda p: p.company_id == company
+            )
+            course.price = price_record.price if price_record else 0.0
+
+    def _inverse_price(self):
+        """Set price in company-specific pricing record"""
+        for course in self:
+            company = course.company_id or self._get_company()
+            price_record = course.course_price_ids.filtered(
+                lambda p: p.company_id == company
+            )
+            
+            if price_record:
+                price_record.price = course.price
+            else:
+                # Create new price record for this company
+                self.env['openacademy.course.price'].create({
+                    'course_id': course.id,
+                    'company_id': company.id,
+                    'price': course.price,
+                    'currency_id': course.currency_id.id,
+                })
 
     def move_to_archive(self):
         """

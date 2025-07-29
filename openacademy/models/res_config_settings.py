@@ -10,7 +10,9 @@ class ResConfigSettings(models.TransientModel):
     )
 
     default_responsible_id = fields.Many2one(
+        string='Default Responsible',
         related='company_id.responsible_id',
         default_model='openacademy.course',
         readonly=False,
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
     )

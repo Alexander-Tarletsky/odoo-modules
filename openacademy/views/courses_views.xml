@@ -47,6 +47,17 @@
                                     <field name="session_ids"/>
                                 </group>
                             </page>
+                            <page string="Company Prices">
+                                <group>
+                                    <field name="course_price_ids" readonly="1">
+                                        <list>
+                                            <field name="company_id"/>
+                                            <field name="price"/>
+                                            <field name="currency_id"/>
+                                        </list>
+                                    </field>
+                                </group>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
