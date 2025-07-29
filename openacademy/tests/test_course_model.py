@@ -103,7 +103,7 @@ class TestCoursePrice(TransactionCase):
         self.test_company_2 = self.env['res.company'].create({'name': "Test Company 2"})
         self.Course = self.env['openacademy.course']
 
-    def test_check_price(self):
+    def test_course_price(self):
         self.test_course = self.Course.create(
             {'title': 'Test Course 1'})
 
@@ -113,6 +113,8 @@ class TestCoursePrice(TransactionCase):
             self.test_course.with_company(self.test_company_1).price,
             10,
             "Wrong course price")
+
+        # self.test_course.invalidate_recordset(flush=True)
 
         self.assertEqual(
             self.test_course.with_company(self.test_company_2).price,
@@ -152,21 +154,21 @@ class TestSessionOnlyCurrentCompany(TransactionCase):
             'instructor_id': test_instructor_2.id,
         })
 
-        self.test_course.invalidate_cache()
+        self.test_course.invalidate_recordset()
         self.assertEqual(
             self.test_course.with_company(self.test_company_1).session_ids,
             test_session_1,
             "Wrong Course.session_ids field",
         )
 
-        self.test_course.invalidate_cache()
+        self.test_course.invalidate_recordset()
         self.assertEqual(
             self.test_course.with_company(self.test_company_2).session_ids,
             test_session_2,
             "Wrong Course.session_ids field",
         )
 
-    def test_set_session_default_company(self):
+    def test_set_session_def_company(self):
         test_instructor_1 = self.Instructor.create({
             'name': "Test Instructor 1",
             'is_instructor': True,

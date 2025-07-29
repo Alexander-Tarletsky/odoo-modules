@@ -18,6 +18,24 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"  // Add project core to PYTHONPATH
             }
+        },
+        {
+            "name": "Odoo Test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/odoo/odoo-bin",
+            "args": [
+                "-c", "odoo_test.conf",
+                "--test-enable",
+                "--test-tags", "openacademy",
+                // "-i", "openacademy"
+                "--stop-after-init"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"  // Add project core to PYTHONPATH
+            }
         }
     ]
 }

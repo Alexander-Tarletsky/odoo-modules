@@ -9,7 +9,7 @@
     'category': 'Training',
     'version': '18.0.1.0.0',
 
-    'depends': ['base', 'board', 'web', 'mail', 'multi_step_wizard'],
+    'depends': ['base', 'board', 'web', 'mail'],
 
     'data': [
         'security/groups.xml',

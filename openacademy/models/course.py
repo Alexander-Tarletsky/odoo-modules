@@ -43,8 +43,9 @@ class Course(models.Model):
         string="Price of Course",
         compute='_compute_price',
         inverse='_inverse_price',
-        store=True,
+        # store=True,
         currency_field='currency_id',
+        # readonly=True,
     )
 
     currency_id = fields.Many2one(
@@ -53,14 +54,6 @@ class Course(models.Model):
         readonly=True,
         company_dependent=True,
         default=lambda self: self._get_company().currency_id.id,
-    )
-
-    # Add company_id field for better company isolation
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        string='Company',
-        default=lambda self: self._get_company(),
-        required=True,
     )
 
     # Add One2many relationship to course prices
@@ -78,11 +71,12 @@ class Course(models.Model):
         ),
     ]
 
-    @api.depends('company_id', 'course_price_ids.price')
+    # @api.depends('course_price_ids.price')
+    @api.depends_context('company')
     def _compute_price(self):
         """Compute price based on company-specific pricing"""
         for course in self:
-            company = course.company_id or self._get_company()
+            company = self._get_company()
             price_record = course.course_price_ids.filtered(
                 lambda p: p.company_id == company
             )
@@ -91,7 +85,7 @@ class Course(models.Model):
     def _inverse_price(self):
         """Set price in company-specific pricing record"""
         for course in self:
-            company = course.company_id or self._get_company()
+            company = self._get_company()
             price_record = course.course_price_ids.filtered(
                 lambda p: p.company_id == company
             )
@@ -100,11 +94,12 @@ class Course(models.Model):
                 price_record.price = course.price
             else:
                 # Create new price record for this company
+                currency_id = course.currency_id.id or self._get_company().currency_id.id
                 self.env['openacademy.course.price'].create({
                     'course_id': course.id,
                     'company_id': company.id,
                     'price': course.price,
-                    'currency_id': course.currency_id.id,
+                    'currency_id': currency_id,
                 })
 
     def move_to_archive(self):

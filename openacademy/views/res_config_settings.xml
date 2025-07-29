@@ -10,13 +10,13 @@
                 <xpath expr="//form" position="inside">
                     <app data-string="Open Academy" string="Open Academy" name="openacademy" groups="openacademy.openacademy_manager_group">
                         <block title="General Settings" name="general_settings_container">
-                            <setting id="res_config_settings_view_setting_company_open" 
+                            <setting id="openacademy_res_config_settings_company_open_setting_view_form" 
                                      title="Company Status" 
                                      help="Change this value to close/open OA Company and allow participants to sign up for sessions.">
                                 <field name="company_is_open"/>
                             </setting>
                             
-                            <setting id="res_config_settings_view_setting_default_responsible" 
+                            <setting id="openacademy_res_config_settings_default_responsible_setting_view_form" 
                                      title="Default Responsible" 
                                      help="Set global default responsible for courses."
                                      company_dependent="1">
