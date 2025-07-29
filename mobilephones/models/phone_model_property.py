@@ -1,7 +1,7 @@
 from odoo import fields, models
 
 
-class PropertyModels(models.Model):
+class PhoneModelProperty(models.Model):
     _name = 'mobilephones.property'
     _description = "Mobile Phones models properties"
     _order = 'title'

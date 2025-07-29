@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
+<odoo noupdate="1">
+    <data>
         <record id="model0" model="mobilephones.model">
             <field name="title">Redmi 9 4GB/64GB</field>
             <field name="description">

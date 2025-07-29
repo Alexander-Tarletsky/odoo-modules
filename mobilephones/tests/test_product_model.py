@@ -16,7 +16,7 @@ class TestProduct(TransactionCase):
             'manufacturer_id': self.test_manufacturer.id,
         }])
 
-    def test_onchange_manufacturer_id(self):
+    def test_form_manufacturer_id(self):
         product_form = Form(self.env['product.template'])
         product_form.categ_id = self.env.ref('product.product_category_all')
         product_form.manufacturer_id = self.test_manufacturer

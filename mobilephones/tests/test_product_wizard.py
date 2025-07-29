@@ -24,7 +24,7 @@ class TestCreateProductWizard(TransactionCase):
         self.test_wizard = self.env['mobilephones.create_product_wizard'].create([{
             'categ_id': self.env.ref('product.product_category_all').id}])
 
-    def test_compute_product_name(self):
+    def test_product_name(self):
         self.test_wizard.manufacturer_id = self.test_manufacturer_1.id
         self.test_wizard.model_id = self.test_model.id
         self.assertEqual(
@@ -55,7 +55,7 @@ class TestCreateProductWizard(TransactionCase):
             "Wrong create product",
         )
 
-    def test_onchange_manufacturer_id(self):
+    def test_wizard_manufacturer_id(self):
         self.test_wizard.manufacturer_id = self.test_manufacturer_1.id
         self.test_wizard.model_id = self.test_model.id
         self.assertEqual(

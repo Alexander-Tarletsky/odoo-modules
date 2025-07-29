@@ -26,9 +26,10 @@
             "program": "${workspaceFolder}/odoo/odoo-bin",
             "args": [
                 "-c", "odoo_test.conf",
-                "--test-enable",
-                "--test-tags", "openacademy",
-                // "-i", "openacademy"
+                "-i", "mobilephones,openacademy",
+                // "-u", "mobilephones,openacademy",
+                // "--test-enable",
+                "--test-tags", "/mobilephones,/openacademy",
                 "--stop-after-init"
             ],
             "console": "integratedTerminal",
