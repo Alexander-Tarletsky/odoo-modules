@@ -45,6 +45,26 @@ jobs:
     name: Build and Run Tests
     runs-on: ubuntu-latest
     needs: linters
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_HOST: localhost
+      DB_PORT: 5432
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -52,20 +72,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image
-        run: docker compose -f docker-compose.yaml build
-
-      - name: Start Odoo and DB services
-        run: docker compose -f docker-compose.yaml up -d
-
-      - name: Wait for DB
-        run: docker compose exec web bash -c "until pg_isready -h db -p 5432; do sleep 1; done"
+      - name: Build Odoo image
+        run: docker compose build web
 
       - name: Run Odoo tests
         run: |
-          docker compose exec web \
+          docker compose run --rm web \
             python3 odoo/odoo-bin \
-              -d odoo_test \
+              --db-host=$DB_HOST \
+              --db-port=$DB_PORT \
+              --db-user=$DB_USER \
+              --db-password=$DB_PASSWORD \
+              -d $DB_NAME \
               -i mobilephones,openacademy \
               --test-tags /mobilephones,/openacademy \
               --stop-after-init
