@@ -51,7 +51,7 @@ class CreateProductWizard(models.TransientModel):
         """
         for record in self:
             if record.manufacturer_id and record.model_id:
-                record.name = "{}  {}".format(record.manufacturer_id.name, record.model_id.title)
+                record.name = f"{record.manufacturer_id.name} {record.model_id.title}"
 
     @api.onchange('manufacturer_id')
     def _onchange_manufacturer_id(self):
@@ -68,7 +68,7 @@ class CreateProductWizard(models.TransientModel):
 
         Used in multi-step wizard navigation.
         """
-        self.state = 'start'
+        self.state = 'start'  # pylint: disable=attribute-defined-outside-init
 
     def create_product(self):
         """Create a new product based on wizard data.

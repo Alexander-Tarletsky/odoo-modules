@@ -9,8 +9,8 @@ class TestCreateProductWizard(TransactionCase):
     """
     Test Cases related to CreateProductWizard(`mobilephones.create_product_wizard`)
     """
-    def setUp(self, *args, **kwargs):
-        super(TestCreateProductWizard, self).setUp()
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
+        super().setUp()
         self.test_manufacturer_1 = self.env['mobilephones.manufacturer'].create([
             {'name': 'Test Manufacturer 1'}
         ])
@@ -25,6 +25,9 @@ class TestCreateProductWizard(TransactionCase):
             'categ_id': self.env.ref('product.product_category_all').id}])
 
     def test_product_name(self):
+        """
+        Test that the product name is set correctly
+        """
         self.test_wizard.manufacturer_id = self.test_manufacturer_1.id
         self.test_wizard.model_id = self.test_model.id
         self.assertEqual(
@@ -34,8 +37,10 @@ class TestCreateProductWizard(TransactionCase):
         )
 
     def test_state_previous_final(self):
-
-        self.test_wizard.state_previous_final(),
+        """
+        Test that the state is set correctly
+        """
+        self.test_wizard.state_previous_final()
         self.assertEqual(
             self.test_wizard.state,
             "start",
@@ -43,6 +48,9 @@ class TestCreateProductWizard(TransactionCase):
         )
 
     def test_create_product(self):
+        """
+        Test that the product is created correctly
+        """
         self.test_wizard.manufacturer_id = self.test_manufacturer_1.id
         self.test_wizard.model_id = self.test_model.id
         self.test_wizard.create_product()
@@ -56,6 +64,9 @@ class TestCreateProductWizard(TransactionCase):
         )
 
     def test_wizard_manufacturer_id(self):
+        """
+        Test that the manufacturer_id field is set correctly
+        """
         self.test_wizard.manufacturer_id = self.test_manufacturer_1.id
         self.test_wizard.model_id = self.test_model.id
         self.assertEqual(
