@@ -41,27 +41,25 @@ jobs:
       - name: Run isort check
         run: isort --check-only --diff ./openacademy ./mobilephones
 
-  build_and_run:
-    name: Build and Start Containers
+  build_and_tests:
+    name: Build and Run Tests
     runs-on: ubuntu-latest
     needs: linters
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build and start Docker Compose
-        run: docker compose -f docker-compose.yaml up -d --build
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Wait for services to start
-        run: sleep 10
+      - name: Build image
+        run: docker compose -f docker-compose.yaml build
 
-  run_tests:
-    name: Run Odoo Tests
-    runs-on: ubuntu-latest
-    needs: build_and_run
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Start Odoo service
+        run: docker compose -f docker-compose.yaml up -d web
+
+      - name: Wait for DB
+        run: docker compose exec web bash -c "until pg_isready -h db -p 5432; do sleep 1; done"
 
       - name: Run Odoo tests
         run: |
