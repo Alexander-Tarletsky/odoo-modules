@@ -42,7 +42,7 @@ class ResPartner(models.Model):
                 vals['category_id'] = tag_teacher
             else:
                 vals['category_id'] = False
-        res = super(ResPartner, self).write(vals)
+        res = super().write(vals)
         return res
 
     @api.model_create_multi
@@ -57,7 +57,7 @@ class ResPartner(models.Model):
         Returns:
             res.partner: Created partner records.
         """
-        instructor = super(ResPartner, self).create(vals_list)
+        instructor = super().create(vals_list)
         instructor.update_instructor_tag()
         return instructor
 

@@ -12,7 +12,7 @@ from psycopg2 import IntegrityError
 @tagged('-at_install', 'post_install')
 class TestCourseName(TransactionCase):
     def setUp(self, *args, **kwargs):
-        super(TestCourseName, self).setUp()
+        super().setUp()
         self.Course = self.env['openacademy.course']
 
     def test_unique_name_constraints(self):
@@ -28,7 +28,7 @@ class TestCourseName(TransactionCase):
 class TestCourseState(TransactionCase):
     """Test Case to test a course activation and deactivation"""
     def setUp(self, *args, **kwargs):
-        super(TestCourseState, self).setUp()
+        super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': 'Course 1'})
 
     def test_state_course(self):
@@ -68,7 +68,7 @@ class TestCourseState(TransactionCase):
 class TestCourseCopyMethod(TransactionCase):
     """Test Case to test the Copy method"""
     def setUp(self, *args, **kwargs):
-        super(TestCourseCopyMethod, self).setUp()
+        super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': 'Course_1'})
 
     def test_one_copy_course(self):
@@ -99,7 +99,7 @@ class TestCourseCopyMethod(TransactionCase):
 class TestCoursePrice(TransactionCase):
     """Test case tests the behavior of the Course.price field for different companies"""
     def setUp(self, *args, **kwargs):
-        super(TestCoursePrice, self).setUp()
+        super().setUp()
         self.test_company_1 = self.env['res.company'].create({'name': "Test Company 1"})
         self.test_company_2 = self.env['res.company'].create({'name': "Test Company 2"})
         self.Course = self.env['openacademy.course']
@@ -128,7 +128,7 @@ class TestSessionOnlyCurrentCompany(TransactionCase):
     """Test case test of displaying sessions of the current company only
     and default setting for the session of the current company"""
     def setUp(self, *args, **kwargs):
-        super(TestSessionOnlyCurrentCompany, self).setUp()
+        super().setUp()
         self.test_company_1 = self.env['res.company'].create({'name': "Test Company 1"})
         self.test_company_2 = self.env['res.company'].create({'name': "Test Company 2"})
         self.Instructor = self.env['res.partner']

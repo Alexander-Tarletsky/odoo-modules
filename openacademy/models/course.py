@@ -156,4 +156,4 @@ class Course(models.Model):
             title = 'Duplicate of {}'.format(title)
 
         default['title'] = title
-        return super(Course, self).copy(default)
+        super().copy(default)

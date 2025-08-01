@@ -16,7 +16,7 @@ class TestAddAttendeeWizard(TransactionCase):
         """
         Prepare environment to unit tests
         """
-        super(TestAddAttendeeWizard, self).setUp()
+        super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': "Test Course 1"})
         self.test_instructor = self.env['res.partner'].create({
             'name': "Test Instructor 1",

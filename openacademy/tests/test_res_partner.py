@@ -8,7 +8,7 @@ from odoo.tests import TransactionCase, tagged
 class TestCourseCopyMethod(TransactionCase):
     """Test Case to test the Create and Write methods"""
     def setUp(self, *args, **kwargs):
-        super(TestCourseCopyMethod, self).setUp()
+        super().setUp()
         self.Instructor = self.env['res.partner']
         self.test_tag_teacher = self.env.ref('openacademy.partner_tag_teacher')
 

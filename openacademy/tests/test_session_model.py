@@ -12,7 +12,7 @@ class TestSessionAttendee(TransactionCase):
     """Test Case implements a check for adding a session instructor and attendee"""
 
     def setUp(self, *args, **kwargs):
-        super(TestSessionAttendee, self).setUp()
+        super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': 'Course 1'})
         self.test_session = self.env['openacademy.session']
         self.test_attendee = self.env['res.partner']
@@ -68,7 +68,7 @@ class TestSessionDate(TransactionCase):
     """Test Case implements verification of setting dates and seats for sessions"""
 
     def setUp(self, *args, **kwargs):
-        super(TestSessionDate, self).setUp()
+        super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': 'Course 1'})
 
         self.test_instructor = self.env['res.partner'].create({
@@ -177,7 +177,7 @@ class TestSessionDate(TransactionCase):
 class TestSessionInstructorOnlyCurrentCompany(TransactionCase):
     """Test case test of displaying sessions of the current company only"""
     def setUp(self, *args, **kwargs):
-        super(TestSessionInstructorOnlyCurrentCompany, self).setUp()
+        super().setUp()
         self.test_company_1 = self.env['res.company'].create({'name': "Test Company 1"})
         self.test_company_2 = self.env['res.company'].create({'name': "Test Company 2"})
         self.Instructor = self.env['res.partner']
