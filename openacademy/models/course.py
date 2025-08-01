@@ -129,9 +129,22 @@ class Course(models.Model):
             self.write({'state': 'inactive'})
 
     def _get_company(self):
+        """Get the current company from the environment.
+        
+        Returns:
+            res.company: The current company record.
+        """
         return self.env.company
 
     def copy(self, default=None):
+        """Create a copy of the course with a unique title.
+        
+        Args:
+            default (dict, optional): Default values for the copy. Defaults to None.
+            
+        Returns:
+            openacademy.course: The copied course record.
+        """
         if not default:
             default = {}
         title = self.title

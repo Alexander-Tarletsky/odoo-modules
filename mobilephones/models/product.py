@@ -19,5 +19,10 @@ class Product(models.Model):
 
     @api.onchange('manufacturer_id')
     def _onchange_manufacturer_id(self):
+        """Handle onchange event when manufacturer is changed.
+        
+        Clears the model selection if the selected model doesn't belong
+        to the newly selected manufacturer.
+        """
         if self.model_id and self.model_id.manufacturer_id != self.manufacturer_id:
             self.model_id = None

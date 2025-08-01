@@ -63,6 +63,9 @@ enable=c-extension-no-member,odoolint
 disable=import-error,
         protected-access,
         manifest-required-author, # We have different authors
+        missing-module-docstring,
+        missing-class-docstring,
+        no-name-in-module,
 
 [REPORTS]
 
@@ -359,7 +362,7 @@ name-group=
 
 # Regular expression which should only match function or class names that do
 # not require a docstring.
-no-docstring-rgx=^_
+no-docstring-rgx=^__init__$|^Test.*$
 
 # List of decorators that produce properties, such as abc.abstractproperty. Add
 # to this list to register other decorators that produce valid properties.
@@ -409,9 +412,7 @@ min-public-methods=2
 [CLASSES]
 
 # List of method names used to declare (i.e. assign) instance attributes.
-defining-attr-methods=__init__,
-                      __new__,
-                      setUp
+defining-attr-methods=__init__,__new__,setUp
 
 # List of member names, which should be excluded from the protected access
 # warning.

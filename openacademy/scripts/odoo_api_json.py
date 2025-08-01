@@ -38,6 +38,18 @@ class SessionsCreator:
         self.uid = self._auth_uid()
 
     def json_rpc(self, method, params):
+        """Send JSON-RPC request to Odoo server.
+        
+        Args:
+            method (str): The JSON-RPC method to call.
+            params (dict): Parameters for the method call.
+            
+        Returns:
+            dict: The result from the JSON-RPC call.
+            
+        Raises:
+            Exception: If the response contains an error.
+        """
         headers = {'content-type': 'application/json'}
         _id = int(round(datetime.now().timestamp()))
         payload = {
@@ -55,6 +67,16 @@ class SessionsCreator:
         return response.json()['result']
 
     def call(self, service, method, *args):
+        """Call Odoo service method with authentication.
+        
+        Args:
+            service (str): The service to call (common or object).
+            method (str): The method to execute.
+            *args: Additional arguments for the method.
+            
+        Returns:
+            dict: The result from the service call.
+        """
         _args = (self.db, self.uid, self._password) + args
         params = {
             'service': service,  # common or object
@@ -65,6 +87,14 @@ class SessionsCreator:
         return self.json_rpc('call', params=params)
 
     def _auth_uid(self) -> str:
+        """Authenticate user and get user ID.
+        
+        Returns:
+            str: The authenticated user ID.
+            
+        Raises:
+            AttributeError: If authentication fails.
+        """
         uid_args = (self.db, self.user, self._password)
         params = {
             'service': 'common',  # common or object
@@ -77,8 +107,10 @@ class SessionsCreator:
         return uid
 
     def get_instructor_ids_list(self) -> Union[bool, List[str]]:
-        """This method checks if there are any instructors at all.
-        If they are, then it returns a list of them. Otherwise, it will return False."""
+        """
+        This method checks if there are any instructors at all.
+        If they are, then it returns a list of them. Otherwise, it will return False.
+        """
         instructor_ids = self.call(
             'object', 'execute_kw',
             'res.partner', 'search',
@@ -89,8 +121,10 @@ class SessionsCreator:
         return False
 
     def get_course_id(self) -> Union[bool, str]:
-        """This method checks if there is such a course. If so, it returns the course id,
-        otherwise it returns False"""
+        """
+        This method checks if there is such a course. If so, it returns the course id,
+        otherwise it returns False
+        """
         course_id = self.call(
             'object', 'execute_kw',
             'openacademy.course', 'search',
@@ -103,7 +137,14 @@ class SessionsCreator:
     def get_session_ids_list(self) -> List[str]:
         """This method checks if there is already a session with the same name in the database.
         If they are, then it returns a list of session ids. Otherwise, it will return
-        an empty list."""
+        an empty list.
+        
+        Returns:
+            List[str]: List of session IDs for the Python course.
+            
+        Raises:
+            AttributeError: If the Python course is not found.
+        """
         course_id = self.get_course_id()
         if not course_id:
             raise AttributeError("Course with the such name is not registered!")
@@ -117,6 +158,12 @@ class SessionsCreator:
         return same_session
 
     def get_start_dates_list(self) -> Union[bool, str, List[str]]:
+        """Get list of start dates for existing sessions.
+        
+        Returns:
+            Union[bool, str, List[str]]: False if no sessions exist, single date string if one session,
+            or list of date strings for multiple sessions.
+        """
         date_list = []
         same_session = self.get_session_ids_list()
         if not same_session:
@@ -136,13 +183,34 @@ class SessionsCreator:
                 return date_list
 
     def create_sessions(self, number_of_sessions, start_date, seats) -> Optional[str]:
+        """Create multiple sessions with unique start dates.
+        
+        Args:
+            number_of_sessions (int): Number of sessions to create.
+            start_date (str): Initial start date in YYYY-MM-DD format.
+            seats (int): Number of seats for each session.
+            
+        Returns:
+            Optional[str]: ID of the last created session, or None if no sessions created.
+        """
         start_date = datetime.strptime(start_date, '%Y-%m-%d')  # create object(date)
-        list_start_date = self.get_start_dates_list() if self.get_start_dates_list() else []
+        start_dates_result = self.get_start_dates_list()
+        list_start_date = []
+        if isinstance(start_dates_result, list):
+            list_start_date = start_dates_result
+        elif isinstance(start_dates_result, str):
+            list_start_date = [start_dates_result]
+        # If False, keep empty list
+        
         new_sessions_id = None
 
         while number_of_sessions > 0:
             while start_date.strftime('%Y-%m-%d') in list_start_date:  # exclude start_date matches
                 start_date += timedelta(days=1)
+
+            instructor_ids = self.get_instructor_ids_list()
+            if not instructor_ids or instructor_ids is True:
+                raise AttributeError("No instructors found in the system!")
 
             new_sessions_id = self.call(
                 'object', 'execute_kw',
@@ -152,7 +220,7 @@ class SessionsCreator:
                     'seats': seats,
                     'duration': 10,
                     'course_id': self.get_course_id(),
-                    'instructor_id': random.choice(self.get_instructor_ids_list()),
+                    'instructor_id': random.choice(instructor_ids),
                 }],
             )
             start_date += timedelta(days=36)

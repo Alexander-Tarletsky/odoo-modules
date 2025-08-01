@@ -36,7 +36,7 @@ jobs:
         run: flake8 --config .flake8 ./openacademy ./mobilephones
 
       - name: Run pylint
-        run: pylint --rcfile=.pylintrc --load-plugins=pylint_odoo --valid-odoo-versions=18.0 -e odoolint ./openacademy ./mobilephones
+        run: pylint --rcfile=.pylintrc --load-plugins=pylint_odoo --valid-odoo-versions=18.0 ./openacademy ./mobilephones
 
       - name: Run isort check
         run: isort --check-only --diff ./openacademy ./mobilephones

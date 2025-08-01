@@ -72,6 +72,11 @@ class Session(models.Model):
 
     @api.depends('seats', 'attendee_ids',)
     def _compute_taken_percentage(self):
+        """
+        Compute the percentage of seats occupied by attendees.
+        Calculates the occupancy rate as (number of attendees / total seats) * 100.
+        Sets taken_percentage to 0 if there are no attendees.
+        """
         for session in self:
             if len(session.attendee_ids) > 0:
                 occupancy = len(session.attendee_ids) / session.seats * 100
@@ -81,16 +86,28 @@ class Session(models.Model):
 
     @api.depends('start_date', 'duration',)
     def _compute_end_date(self):
+        """
+        Compute the end date based on start date and duration.
+        Calculates end_date as start_date + duration days.
+        """
         for session in self:
             session.end_date = session.start_date + timedelta(days=session.duration)
 
     def _inverse_end_date(self):
+        """
+        Set duration based on start_date and end_date.
+        Calculates duration as the difference between end_date and start_date in days.
+        """
         for session in self:
             duration = session.end_date - session.start_date
             session.duration = duration.days
 
     @api.depends('attendee_ids')
     def _compute_number_attendees(self):
+        """
+        Compute the total number of attendees for the session.
+        Sets number_attendees to the count of attendee_ids.
+        """
         for record in self:
             record.number_attendees = len(record.attendee_ids)
 
@@ -129,6 +146,11 @@ class Session(models.Model):
 
     @api.constrains('attendee_ids')
     def _check_attendee(self):
+        """Validate that instructors cannot be attendees.
+        
+        Raises:
+            ValidationError: If any attendee is marked as an instructor.
+        """
         for record in self.attendee_ids:
             if record.is_instructor:
                 raise exceptions.ValidationError(
@@ -137,6 +159,11 @@ class Session(models.Model):
 
     @api.constrains('instructor_id')
     def _check_instructor(self):
+        """Validate that the instructor is marked as an instructor.
+        
+        Raises:
+            ValidationError: If the instructor is not marked as an instructor.
+        """
         for record in self.instructor_id:
             if not record.is_instructor:
                 raise exceptions.ValidationError(
@@ -144,6 +171,11 @@ class Session(models.Model):
                 )
 
     def _get_company(self):
+        """Get the current company from the environment.
+        
+        Returns:
+            res.company: The current company record.
+        """
         return self.env.company
 
     def notify_about_start_session(self):
