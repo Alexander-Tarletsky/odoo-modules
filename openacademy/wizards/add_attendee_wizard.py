@@ -1,4 +1,4 @@
-from odoo import _, exceptions, fields, models
+from odoo import exceptions, fields, models
 
 
 class AddAttendeeWizard(models.TransientModel):
@@ -42,9 +42,9 @@ class AddAttendeeWizard(models.TransientModel):
         for session in self.session_ids:
             if session.number_attendees >= session.seats:
                 raise exceptions.ValidationError(
-                    _(
-                        "Error adding attendee. The number of seats for this session in the {}"
-                        "programming course has been exceeded.".format(session.course_id.title)
+                    self.env._(
+                        "Error adding attendee. The number of seats for this session in the "
+                        "%s programming course has been exceeded."
                     )
                 )
             session.attendee_ids += self.attendee_ids

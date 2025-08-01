@@ -15,7 +15,8 @@ class CourseController(http.Controller):
         Args:
             title (str, optional): Filter courses by title (case-insensitive).
             start_date (str, optional): Filter courses by session start date (YYYY-MM-DD format).
-            available_seats (int, optional): Filter courses with sessions having at least this many available seats.
+            available_seats (int, optional): Filter courses with sessions having at least
+            this many available seats.
 
         Returns:
             Response: JSON response with course data or error information.

@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from odoo import _, api, exceptions, fields, models
+from odoo import api, exceptions, fields, models
 
 
 class Session(models.Model):
@@ -15,23 +15,20 @@ class Session(models.Model):
     color = fields.Integer()
 
     start_date = fields.Date(
-        string='Start Date',
         default=lambda self: fields.Date.today(),
     )
 
     end_date = fields.Date(
-        string='End Date',
         compute='_compute_end_date',
         inverse='_inverse_end_date',
         store=True,
     )
 
-    seats = fields.Integer(string='Seats', required=True, default=10)
+    seats = fields.Integer(required=True, default=10)
     duration = fields.Integer(string='Duration of days')
 
     course_id = fields.Many2one(
         comodel_name='openacademy.course',
-        string='Course',
         ondelete='cascade',
         required=True,
     )
@@ -119,7 +116,7 @@ class Session(models.Model):
         for record in self:
             if record.seats < len(record.attendee_ids):
                 raise exceptions.UserError(
-                    _("Number of seats should be more than number of participants")
+                    self.env._("Number of seats should be more than number of participants")
                 )
 
     @api.onchange('end_date', 'duration', )
@@ -131,7 +128,7 @@ class Session(models.Model):
             duration = session.end_date - session.start_date
 
             if session.duration < 0 or duration.days < 0:
-                raise exceptions.UserError(_("Duration cannot be negative"))
+                raise exceptions.UserError(self.env._("Duration cannot be negative"))
 
     @api.onchange('attendee_ids')
     def _onchange_attendees(self):
@@ -139,10 +136,14 @@ class Session(models.Model):
         if not self.env.company.company_is_open:
             return {
                 'warning': {
-                    'title': _("This company is closed"),
-                    'message': _("You cannot change the number of participants in the sessions"),
+                    'title': self.env._("This company is closed"),
+                    'message': self.env._(
+                        "You cannot change the number of participants in the sessions"
+                    ),
                 }
             }
+
+        return {}
 
     @api.constrains('attendee_ids')
     def _check_attendee(self):
@@ -154,7 +155,7 @@ class Session(models.Model):
         for record in self.attendee_ids:
             if record.is_instructor:
                 raise exceptions.ValidationError(
-                    _("Error adding session attendee! Instructor cannot be a attendee")
+                    self.env._("Error adding session attendee! Instructor cannot be a attendee")
                 )
 
     @api.constrains('instructor_id')
@@ -167,7 +168,9 @@ class Session(models.Model):
         for record in self.instructor_id:
             if not record.is_instructor:
                 raise exceptions.ValidationError(
-                    _("Error adding session instructor! This participant is not an instructor")
+                    self.env._(
+                        "Error adding session instructor! This participant is not an instructor"
+                    )
                 )
 
     def _get_company(self):
@@ -194,4 +197,4 @@ class Session(models.Model):
                 context.update({'session': session, 'participants': ','.join(participants)})
 
                 mail_template = self.env.ref('openacademy.session_start_notification_email')
-                mail_template.with_context(context).send_mail(company.id, force_send=True)
+                mail_template.with_context(**context).send_mail(company.id, force_send=True)

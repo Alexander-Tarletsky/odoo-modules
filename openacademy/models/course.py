@@ -10,7 +10,7 @@ class Course(models.Model):
     active = fields.Boolean(default=True)
 
     title = fields.Char(string="Title course", required=True,)
-    description = fields.Text(string='Description')
+    description = fields.Text()
 
     session_ids = fields.One2many(
         comodel_name='openacademy.session',
@@ -27,7 +27,6 @@ class Course(models.Model):
     )
 
     state = fields.Selection(
-        string='State',
         selection=[
             ('active', 'Active'),
             ('inactive', 'Not Active'),
@@ -75,8 +74,8 @@ class Course(models.Model):
     @api.depends_context('company')
     def _compute_price(self):
         """Compute price based on company-specific pricing"""
+        company = self._get_company()
         for course in self:
-            company = self._get_company()
             price_record = course.course_price_ids.filtered(
                 lambda p: p.company_id == company
             )
@@ -84,8 +83,8 @@ class Course(models.Model):
 
     def _inverse_price(self):
         """Set price in company-specific pricing record"""
+        company = self._get_company()
         for course in self:
-            company = self._get_company()
             price_record = course.course_price_ids.filtered(
                 lambda p: p.company_id == company
             )
@@ -150,10 +149,11 @@ class Course(models.Model):
         title = self.title
         list_title = self.search([('title', 'like', str(title) + '%')])
 
-        if len(list_title) > 1:
-            title = 'Duplicate of {} ({})'.format(title, len(list_title))
+        if list_title:
+            title = f'Duplicate of {title} ({len(list_title)})'
         else:
-            title = 'Duplicate of {}'.format(title)
+            title = f'Duplicate of {title}'
 
         default['title'] = title
-        super().copy(default)
+        new_course = super().copy(default=default)
+        return new_course

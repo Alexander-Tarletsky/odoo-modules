@@ -7,14 +7,14 @@ from odoo.tests import TransactionCase, tagged
 @tagged('-at_install', 'post_install')
 class TestCourseCopyMethod(TransactionCase):
     """Test Case to test the Create and Write methods"""
-    def setUp(self, *args, **kwargs):
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
         super().setUp()
-        self.Instructor = self.env['res.partner']
+        self.cls_instructor = self.env['res.partner']
         self.test_tag_teacher = self.env.ref('openacademy.partner_tag_teacher')
 
     def test_create_course_with_set_tag(self):
         """Test create course with set tag"""
-        test_instructor_1 = self.Instructor.create({
+        test_instructor_1 = self.cls_instructor.create({
             'name': "Test Instructor 1",
             'is_instructor': True
         })
@@ -24,7 +24,7 @@ class TestCourseCopyMethod(TransactionCase):
             "Wrong instructor tag",
         )
 
-        test_instructor_2 = self.Instructor.create({
+        test_instructor_2 = self.cls_instructor.create({
             'name': "Test Instructor 2",
             'is_instructor': False
         })
@@ -36,7 +36,7 @@ class TestCourseCopyMethod(TransactionCase):
 
     def test_write_course_with_set_tag(self):
         """Test write course with set tag"""
-        test_instructor_1 = self.Instructor.create({
+        test_instructor_1 = self.cls_instructor.create({
             'name': "Test Instructor 1",
         })
 

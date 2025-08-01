@@ -11,7 +11,7 @@ from odoo.tests import TransactionCase, tagged
 class TestSessionAttendee(TransactionCase):
     """Test Case implements a check for adding a session instructor and attendee"""
 
-    def setUp(self, *args, **kwargs):
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
         super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': 'Course 1'})
         self.test_session = self.env['openacademy.session']
@@ -67,7 +67,7 @@ class TestSessionAttendee(TransactionCase):
 class TestSessionDate(TransactionCase):
     """Test Case implements verification of setting dates and seats for sessions"""
 
-    def setUp(self, *args, **kwargs):
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
         super().setUp()
         self.test_course = self.env['openacademy.course'].create({'title': 'Course 1'})
 
@@ -176,27 +176,28 @@ class TestSessionDate(TransactionCase):
 @tagged('-at_install', 'post_install')
 class TestSessionInstructorOnlyCurrentCompany(TransactionCase):
     """Test case test of displaying sessions of the current company only"""
-    def setUp(self, *args, **kwargs):
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
         super().setUp()
         self.test_company_1 = self.env['res.company'].create({'name': "Test Company 1"})
         self.test_company_2 = self.env['res.company'].create({'name': "Test Company 2"})
-        self.Instructor = self.env['res.partner']
+        self.cls_instructor = self.env['res.partner']
         self.test_course = self.env['openacademy.course'].create({'title': 'Test Course 1'})
-        self.Session = self.env['openacademy.session']
+        self.cls_session = self.env['openacademy.session']
 
     def test_set_session_instructor(self):
-        test_instructor_1 = self.Instructor.create({
+        """Test the setting of the session instructor for the current company."""
+        test_instructor_1 = self.cls_instructor.create({
             'name': "Test Instructor 1",
             'is_instructor': True,
             'company_id': self.test_company_1.id,
         })
-        test_instructor_2 = self.Instructor.create({
+        test_instructor_2 = self.cls_instructor.create({
             'name': "Test Instructor 2",
             'is_instructor': True,
             'company_id': self.test_company_2.id,
         })
 
-        test_session_1 = self.Session.create({
+        test_session_1 = self.cls_session.create({
             'start_date': date.today(),
             'course_id': self.test_course.id,
             'instructor_id': test_instructor_1.id,

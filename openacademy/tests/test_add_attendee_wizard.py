@@ -12,7 +12,7 @@ class TestAddAttendeeWizard(TransactionCase):
     """
     Test Cases related to AddAttendeeWizard(`openacademy.add_attendee_wizard`)
     """
-    def setUp(self, *args, **kwargs):
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Prepare environment to unit tests
         """
@@ -36,19 +36,19 @@ class TestAddAttendeeWizard(TransactionCase):
                 'instructor_id': self.test_instructor.id,
             },
         ])
-        self.Attendee = self.env['res.partner']
-        self.Wizard = self.env['openacademy.add_attendee_wizard']
+        self.cls_attendee = self.env['res.partner']
+        self.cls_wizard = self.env['openacademy.add_attendee_wizard']
 
     def test_add_attendee_to_multiple_sessions(self):
         """
         Add attendee to 2 sessions at a time. Check that attendee was added
         """
-        attendee = self.Attendee.create({
+        attendee = self.cls_attendee.create({
             'name': "Test Attendee 1",
             'is_instructor': False,
         })
 
-        wizard = self.Wizard.create({'session_ids': self.test_sessions.ids})
+        wizard = self.cls_wizard.create({'session_ids': self.test_sessions.ids})
 
         wizard.attendee_ids = [attendee.id]
         wizard.add_attendee()
@@ -57,7 +57,7 @@ class TestAddAttendeeWizard(TransactionCase):
             self.assertEqual(
                 session.attendee_ids,
                 attendee,
-                "Attendee is not equal for session_{}".format(n),
+                f"Attendee is not equal for session_{n}",
             )
 
     def test_add_attendee_for_session_with_attendee(self):
@@ -65,27 +65,27 @@ class TestAddAttendeeWizard(TransactionCase):
         Add attendee to two sessions one of which already has a attendee.
         Check that error will be raised
         """
-        attendee_1 = self.Attendee.create({
+        attendee_1 = self.cls_attendee.create({
             'name': "Test Attendee 1",
             'is_instructor': False,
         })
 
-        attendee_2 = self.Attendee.create({
+        attendee_2 = self.cls_attendee.create({
             'name': "Test Attendee 2",
             'is_instructor': False,
         })
 
         self.test_sessions.attendee_ids = attendee_1
 
-        wizard = self.Wizard.create({'session_ids': self.test_sessions})
+        wizard = self.cls_wizard.create({'session_ids': self.test_sessions})
         wizard.attendee_ids = attendee_2
 
         with self.assertRaises(exceptions.ValidationError) as e_cm:
             wizard.add_attendee()
         self.assertEqual(
             str(e_cm.exception),
-            "Error adding attendee. The number of seats for this session in the {}"
-            "programming course has been exceeded.".format("Test Course 1"),
+            "Error adding attendee. The number of seats for this session in the Test Course 1"
+            "programming course has been exceeded.",
             "Wrong error message",
         )
 
@@ -97,6 +97,6 @@ class TestAddAttendeeWizard(TransactionCase):
 
         self.assertEqual(
             self.env.context.get('active_ids'),
-            self.Wizard._default_sessions().ids,
+            self.cls_wizard._default_sessions().ids,
             "'_default_sessions' method worked incorrectly",
         )

@@ -21,7 +21,6 @@ class CoursePrice(models.Model):
     )
 
     price = fields.Monetary(
-        string='Price',
         default=0.0,
         currency_field='currency_id',
     )
