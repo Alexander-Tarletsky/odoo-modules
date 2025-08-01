@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from odoo import http
-from odoo.http import request, Response
+from odoo.http import Response, request
 
 
 class CourseController(http.Controller):

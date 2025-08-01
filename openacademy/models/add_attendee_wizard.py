@@ -1,4 +1,4 @@
-from odoo import fields, models, exceptions, _
+from odoo import _, exceptions, fields, models
 
 
 class AddAttendeeWizard(models.TransientModel):

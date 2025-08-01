@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 
 class Course(models.Model):
@@ -89,7 +89,7 @@ class Course(models.Model):
             price_record = course.course_price_ids.filtered(
                 lambda p: p.company_id == company
             )
-            
+
             if price_record:
                 price_record.price = course.price
             else:

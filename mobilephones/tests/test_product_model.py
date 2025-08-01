@@ -1,7 +1,7 @@
 """
 Set of tests for Product model
 """
-from odoo.tests import TransactionCase, tagged, Form
+from odoo.tests import Form, TransactionCase, tagged
 
 
 @tagged('-at_install', 'post_install',)

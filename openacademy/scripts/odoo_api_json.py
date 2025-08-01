@@ -1,11 +1,10 @@
-import random
-import requests
-import json
 import argparse
-
-from typing import Optional, Union, List
+import json
+import random
 from datetime import date, datetime, timedelta
+from typing import List, Optional, Union
 
+import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("db", type=str, help="database name")  # 'odoo14'

@@ -33,10 +33,10 @@ jobs:
           pip install flake8 pylint pylint-odoo isort
  
       - name: Run flake8
-        run: flake8 ./openacademy ./mobilephones
+        run: flake8 --config .flake8 ./openacademy ./mobilephones
 
       - name: Run pylint
-        run: pylint --load-plugins=pylint_odoo --valid-odoo-versions=18.0 -e odoolint ./openacademy ./mobilephones
+        run: pylint --rcfile=.pylintrc --load-plugins=pylint_odoo --valid-odoo-versions=18.0 -e odoolint ./openacademy ./mobilephones
 
       - name: Run isort check
         run: isort --check-only --diff ./openacademy ./mobilephones

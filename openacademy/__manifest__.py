@@ -1,7 +1,7 @@
 {
     'name': 'Open Academy',
     'summary': 'Open Academy module for managing trainings',
- 
+
     'author': 'Alexander Tarletsky',
     'website': 'https://github.com/Alexander-Tarletsky/odoo-modules',
     'license': 'LGPL-3',

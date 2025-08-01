@@ -1,11 +1,10 @@
-import os
-import requests
-import json
-import base64
 import argparse
-
+import base64
+import json
+import os
 from datetime import datetime
 
+import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("db", type=str, help="database name")  # 'odoo14'

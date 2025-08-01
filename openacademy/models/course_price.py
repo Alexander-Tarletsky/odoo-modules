@@ -1,4 +1,4 @@
-from odoo import fields, models, _
+from odoo import fields, models
 
 
 class CoursePrice(models.Model):
@@ -12,20 +12,20 @@ class CoursePrice(models.Model):
         required=True,
         ondelete='cascade',
     )
-    
+
     company_id = fields.Many2one(
         comodel_name='res.company',
         string='Company',
         required=True,
         default=lambda self: self.env.company,
     )
-    
+
     price = fields.Monetary(
         string='Price',
         default=0.0,
         currency_field='currency_id',
     )
-    
+
     currency_id = fields.Many2one(
         comodel_name='res.currency',
         string='Currency',

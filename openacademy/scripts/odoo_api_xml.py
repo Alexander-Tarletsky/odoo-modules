@@ -1,10 +1,8 @@
-import xmlrpc.client as xmlrpclib
-import random
 import argparse
-
-from datetime import date, timedelta, datetime
-from typing import Union, List, Optional
-
+import random
+import xmlrpc.client as xmlrpclib
+from datetime import date, datetime, timedelta
+from typing import List, Optional, Union
 
 parser = argparse.ArgumentParser()
 parser.add_argument("db", type=str, help="database name")   # 'odoo14'

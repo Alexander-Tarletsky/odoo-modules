@@ -1,5 +1,6 @@
-from datetime import timedelta, date
-from odoo import fields, models, api, exceptions, _
+from datetime import date, timedelta
+
+from odoo import _, api, exceptions, fields, models
 
 
 class Session(models.Model):
