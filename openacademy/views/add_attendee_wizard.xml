@@ -3,7 +3,7 @@
     <data>
         <!-- Wizards -->
         <record id="add_attendee_wizard_view_form" model="ir.ui.view">
-            <field name="name">add_attendee_wizard_form</field>
+            <field name="name">openacademy.add_attendee_wizard.view.form</field>
             <field name="model">openacademy.add_attendee_wizard</field> 
             <field name="arch" type="xml">
                 <form string="Add Attendee">

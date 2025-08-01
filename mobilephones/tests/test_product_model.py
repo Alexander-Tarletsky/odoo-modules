@@ -1,13 +1,13 @@
 """
 Set of tests for Product model
 """
-from odoo.tests import TransactionCase, tagged, Form
+from odoo.tests import Form, TransactionCase, tagged
 
 
 @tagged('-at_install', 'post_install',)
 class TestProduct(TransactionCase):
-    def setUp(self, *args, **kwargs):
-        super(TestProduct, self).setUp()
+    def setUp(self, *args, **kwargs):  # pylint: disable=unused-argument
+        super().setUp()
         self.test_manufacturer = self.env['mobilephones.manufacturer'].create([
             {'name': 'Test Manufacturer 1'}
         ])
@@ -16,7 +16,10 @@ class TestProduct(TransactionCase):
             'manufacturer_id': self.test_manufacturer.id,
         }])
 
-    def test_onchange_manufacturer_id(self):
+    def test_form_manufacturer_id(self):
+        """
+        Test that the manufacturer_id field is set correctly
+        """
         product_form = Form(self.env['product.template'])
         product_form.categ_id = self.env.ref('product.product_category_all')
         product_form.manufacturer_id = self.test_manufacturer

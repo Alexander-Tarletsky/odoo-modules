@@ -1,10 +1,8 @@
-import xmlrpc.client as xmlrpclib
-import random
 import argparse
-
-from datetime import date, timedelta, datetime
-from typing import Union, List, Optional
-
+import random
+import xmlrpc.client as xmlrpclib
+from datetime import date, datetime, timedelta
+from typing import List, Optional, Union
 
 parser = argparse.ArgumentParser()
 parser.add_argument("db", type=str, help="database name")   # 'odoo14'
@@ -42,6 +40,14 @@ class SessionsCreator:
         self.models = xmlrpclib.ServerProxy(self.ODOO_API_OBJECT)
 
     def _auth_uid(self) -> str:
+        """Authenticate user and get user ID.
+
+        Returns:
+            str: The authenticated user ID.
+
+        Raises:
+            AttributeError: If authentication fails.
+        """
         uid = self._common.authenticate(self.db, self.user, self._password, {})
         if not uid:
             raise AttributeError("Invalid authentication parameters!")
@@ -74,7 +80,14 @@ class SessionsCreator:
     def get_session_ids_list(self) -> List[str]:
         """This method checks if there is already a session with the same name in the database.
         If they are, then it returns a list of session ids. Otherwise, it will return
-        an empty list."""
+        an empty list.
+
+        Returns:
+            List[str]: List of session IDs for the JavaScript course.
+
+        Raises:
+            AttributeError: If the JavaScript course is not found.
+        """
         course_id = self.get_course_id()
         if not course_id:
             raise AttributeError("Course with the such name is not registered!")
@@ -88,6 +101,12 @@ class SessionsCreator:
         return same_session
 
     def get_start_dates_list(self) -> Union[bool, List[str]]:
+        """Get list of start dates for existing sessions.
+
+        Returns:
+            Union[bool, List[str]]: False if no sessions exist, single date string if one session,
+            or list of date strings for multiple sessions.
+        """
         date_list = []
         same_session = self.get_session_ids_list()
         if not same_session:
@@ -107,8 +126,28 @@ class SessionsCreator:
                 return date_list
 
     def create_weekly_sessions(self, number_of_sessions, start_date, seats) -> Optional[str]:
+        """Create multiple weekly sessions with unique start dates.
+
+        Args:
+            number_of_sessions (int): Number of sessions to create.
+            start_date (str): Initial start date in YYYY-MM-DD format.
+            seats (int): Number of seats for each session.
+
+        Returns:
+            Optional[str]: ID of the last created session, or None if no sessions created.
+
+        Raises:
+            AttributeError: If the session limit (30) is exceeded or no instructors found.
+        """
         start_date = datetime.strptime(start_date, '%Y-%m-%d')  # create object(date)
-        list_start_date = self.get_start_dates_list() if self.get_start_dates_list() else []
+        start_dates_result = self.get_start_dates_list()
+        list_start_date = []
+        if isinstance(start_dates_result, list):
+            list_start_date = start_dates_result
+        elif isinstance(start_dates_result, str):
+            list_start_date = [start_dates_result]
+        # If False, keep empty list
+
         new_weekly_sessions_id = None
         while number_of_sessions > 0:
             while start_date.strftime('%Y-%m-%d') in list_start_date:   # exclude start_date matches
@@ -118,6 +157,10 @@ class SessionsCreator:
                     "Limit is exceeded! You can no longer create sessions for this course."
                 )
 
+            instructor_ids = self.get_instructor_ids_list()
+            if not instructor_ids or instructor_ids is True:
+                raise AttributeError("No instructors found in the system!")
+
             new_weekly_sessions_id = self.models.execute_kw(
                 self.db, self.uid, self._password,
                 'openacademy.session', 'create',
@@ -126,7 +169,7 @@ class SessionsCreator:
                     'seats': seats,
                     'duration': 7,
                     'course_id': self.get_course_id(),
-                    'instructor_id': random.choice(self.get_instructor_ids_list()),
+                    'instructor_id': random.choice(instructor_ids),
                 }],
             )
             start_date += timedelta(days=15)

@@ -1,12 +1,13 @@
 {
-    'name': "Mobile Phones",
-    'summary': "Mobile Phones module for managing trainings",
+    'name': 'Mobile Phones',
+    'summary': 'Mobile Phones module for managing trainings',
 
-    'author': "Alexander Tarletsky",
-    'website': "https://ventor.tech/",
+    'author': 'Alexander Tarletsky',
+    'website': 'https://github.com/Alexander-Tarletsky/odoo-modules',
+    'license': 'LGPL-3',
 
-    'category': 'Test',
-    'version': '14.0.0.1.0',
+    'category': 'Training',
+    'version': '18.0.1.0.0',
 
     'depends': ['base', 'mail', 'sale', 'multi_step_wizard'],
 

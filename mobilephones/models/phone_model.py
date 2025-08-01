@@ -1,7 +1,7 @@
 from odoo import fields, models
 
 
-class _Model(models.Model):
+class PhoneModel(models.Model):
     _name = 'mobilephones.model'
     _description = "Mobile Phones Model"
     _order = 'title'

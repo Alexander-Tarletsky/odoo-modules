@@ -5,3 +5,5 @@ access_session_user,access.session.user,model_openacademy_session,openacademy_us
 access_session_manager,access.session.manager,model_openacademy_session,openacademy_manager_group,1,1,1,1
 access_add_attendee_wizard_user,access.add_attendee_wizard.user,model_openacademy_add_attendee_wizard,openacademy_user_group,1,0,0,0
 access_add_attendee_wizard_manager,access.add_attendee_wizard.manager,model_openacademy_add_attendee_wizard,openacademy_manager_group,1,1,1,1
+access_course_price_user,access.course.price.user,model_openacademy_course_price,openacademy_user_group,1,0,0,0
+access_course_price_manager,access.course.price.manager,model_openacademy_course_price,openacademy_manager_group,1,1,1,1

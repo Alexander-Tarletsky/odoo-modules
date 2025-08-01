@@ -2,12 +2,25 @@ import json
 from datetime import datetime
 
 from odoo import http
-from odoo.http import request, Response
+from odoo.http import Response, request
 
 
 class CourseController(http.Controller):
-    @http.route('/openacademy/courses', type='http', auth='public', method=['GET'])
-    def get_courses(self, title=None, start_date=None, available_seats=None, **kwargs):
+    @http.route('/openacademy/courses', type='http', auth='public', methods=['GET'])
+    def get_courses(self, title=None, start_date=None, available_seats=None):
+        """Get courses from the database.
+
+        Retrieves courses based on optional filters for title, start date, and available seats.
+
+        Args:
+            title (str, optional): Filter courses by title (case-insensitive).
+            start_date (str, optional): Filter courses by session start date (YYYY-MM-DD format).
+            available_seats (int, optional): Filter courses with sessions having at least
+            this many available seats.
+
+        Returns:
+            Response: JSON response with course data or error information.
+        """
         headers = {'Content-Type': 'application/json'}
         domain_course = []
         payload = {}
@@ -52,9 +65,17 @@ class CourseController(http.Controller):
         type='http',
         auth='public',
         website=True,
-        method=['GET']
+        methods=['GET']
     )
-    def display_courses(self, **kwargs):
+    def display_courses(self):
+        """Display courses on the website.
+
+        Shows courses with their session details. For public users, only shows active courses.
+        For authenticated users, shows all courses.
+
+        Returns:
+            Response: Rendered template with course and session data.
+        """
         if request.env.user.login == 'public':
             courses = request.env['openacademy.course'].search(['active', '=', True])
         else:
@@ -78,9 +99,20 @@ class CourseController(http.Controller):
         '/openacademy/sessions/<int:session_id>/add_listener',
         type='json',
         auth='user',
-        method=['POST'],
+        methods=['POST'],
     )
-    def add_attendees(self, session_id=None, **kwargs):
+    def add_attendees(self, session_id=None):
+        """Add attendees to a session.
+
+        Adds a new attendee to a specific session. Creates the attendee if they don't exist.
+        Requires appropriate access rights (manager group or course responsible).
+
+        Args:
+            session_id (int): The ID of the session to add attendees to.
+
+        Returns:
+            dict: Status response indicating success or failure with error details.
+        """
         session = request.env['openacademy.session'].search([['id', '=', session_id]])
         if not session:
             return {
@@ -96,7 +128,7 @@ class CourseController(http.Controller):
                 "error": "You do not have access rights to modify sessions!",
             }
 
-        data = request.jsonrequest
+        data = request.get_json_data()
         if 'name' not in data:
             return {
                 "status": "failed",

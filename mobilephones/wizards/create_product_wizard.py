@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import api, fields, models
 
 
 class CreateProductWizard(models.TransientModel):
@@ -44,19 +44,38 @@ class CreateProductWizard(models.TransientModel):
 
     @api.depends('manufacturer_id', 'model_id',)
     def _compute_product_name(self):
+        """Compute the product name based on manufacturer and model.
+
+        Combines manufacturer name and model title to create the product name.
+        Format: "Manufacturer Model"
+        """
         for record in self:
             if record.manufacturer_id and record.model_id:
-                record.name = "{}  {}".format(record.manufacturer_id.name, record.model_id.title)
+                record.name = f"{record.manufacturer_id.name} {record.model_id.title}"
 
     @api.onchange('manufacturer_id')
     def _onchange_manufacturer_id(self):
+        """Handle onchange event when manufacturer is changed.
+
+        Clears the model selection if the selected model doesn't belong
+        to the newly selected manufacturer.
+        """
         if self.model_id and self.model_id.manufacturer_id != self.manufacturer_id:
             self.model_id = None
 
     def state_previous_final(self):
-        self.state = 'start'
+        """Set the wizard state back to start.
+
+        Used in multi-step wizard navigation.
+        """
+        self.state = 'start'  # pylint: disable=attribute-defined-outside-init
 
     def create_product(self):
+        """Create a new product based on wizard data.
+
+        Creates a product.product record with the values from the wizard form.
+        Includes manufacturer and model information.
+        """
         args = [{
             'name': self.name,
             'type': self.type,

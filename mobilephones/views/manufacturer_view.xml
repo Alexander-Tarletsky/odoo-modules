@@ -6,10 +6,10 @@
             <field name="name">Manufacturer List</field>
             <field name="model">mobilephones.manufacturer</field>
             <field name="arch" type="xml">
-                <tree>
+                <list>
                     <field name="name"/>
                     <field name="description"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -57,7 +57,7 @@
         <record id="manufacturer_list_action" model="ir.actions.act_window">
             <field name="name">Manufacturer</field>
             <field name="res_model">mobilephones.manufacturer</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="context">{"active_test": False}</field>
         </record>
 
