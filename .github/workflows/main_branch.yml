@@ -55,8 +55,8 @@ jobs:
       - name: Build image
         run: docker compose -f docker-compose.yaml build
 
-      - name: Start Odoo service
-        run: docker compose -f docker-compose.yaml up -d web
+      - name: Start Odoo and DB services
+        run: docker compose -f docker-compose.yaml up -d
 
       - name: Wait for DB
         run: docker compose exec web bash -c "until pg_isready -h db -p 5432; do sleep 1; done"
