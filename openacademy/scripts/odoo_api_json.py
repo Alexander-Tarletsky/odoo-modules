@@ -39,14 +39,14 @@ class SessionsCreator:
 
     def json_rpc(self, method, params):
         """Send JSON-RPC request to Odoo server.
-        
+
         Args:
             method (str): The JSON-RPC method to call.
             params (dict): Parameters for the method call.
-            
+
         Returns:
             dict: The result from the JSON-RPC call.
-            
+
         Raises:
             Exception: If the response contains an error.
         """
@@ -68,12 +68,12 @@ class SessionsCreator:
 
     def call(self, service, method, *args):
         """Call Odoo service method with authentication.
-        
+
         Args:
             service (str): The service to call (common or object).
             method (str): The method to execute.
             *args: Additional arguments for the method.
-            
+
         Returns:
             dict: The result from the service call.
         """
@@ -88,10 +88,10 @@ class SessionsCreator:
 
     def _auth_uid(self) -> str:
         """Authenticate user and get user ID.
-        
+
         Returns:
             str: The authenticated user ID.
-            
+
         Raises:
             AttributeError: If authentication fails.
         """
@@ -138,10 +138,10 @@ class SessionsCreator:
         """This method checks if there is already a session with the same name in the database.
         If they are, then it returns a list of session ids. Otherwise, it will return
         an empty list.
-        
+
         Returns:
             List[str]: List of session IDs for the Python course.
-            
+
         Raises:
             AttributeError: If the Python course is not found.
         """
@@ -159,7 +159,7 @@ class SessionsCreator:
 
     def get_start_dates_list(self) -> Union[bool, str, List[str]]:
         """Get list of start dates for existing sessions.
-        
+
         Returns:
             Union[bool, str, List[str]]: False if no sessions exist, single date string if one session,
             or list of date strings for multiple sessions.
@@ -184,12 +184,12 @@ class SessionsCreator:
 
     def create_sessions(self, number_of_sessions, start_date, seats) -> Optional[str]:
         """Create multiple sessions with unique start dates.
-        
+
         Args:
             number_of_sessions (int): Number of sessions to create.
             start_date (str): Initial start date in YYYY-MM-DD format.
             seats (int): Number of seats for each session.
-            
+
         Returns:
             Optional[str]: ID of the last created session, or None if no sessions created.
         """
@@ -201,7 +201,7 @@ class SessionsCreator:
         elif isinstance(start_dates_result, str):
             list_start_date = [start_dates_result]
         # If False, keep empty list
-        
+
         new_sessions_id = None
 
         while number_of_sessions > 0:

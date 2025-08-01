@@ -45,7 +45,7 @@ class CreateProductWizard(models.TransientModel):
     @api.depends('manufacturer_id', 'model_id',)
     def _compute_product_name(self):
         """Compute the product name based on manufacturer and model.
-        
+
         Combines manufacturer name and model title to create the product name.
         Format: "Manufacturer Model"
         """
@@ -56,7 +56,7 @@ class CreateProductWizard(models.TransientModel):
     @api.onchange('manufacturer_id')
     def _onchange_manufacturer_id(self):
         """Handle onchange event when manufacturer is changed.
-        
+
         Clears the model selection if the selected model doesn't belong
         to the newly selected manufacturer.
         """
@@ -65,14 +65,14 @@ class CreateProductWizard(models.TransientModel):
 
     def state_previous_final(self):
         """Set the wizard state back to start.
-        
+
         Used in multi-step wizard navigation.
         """
         self.state = 'start'
 
     def create_product(self):
         """Create a new product based on wizard data.
-        
+
         Creates a product.product record with the values from the wizard form.
         Includes manufacturer and model information.
         """

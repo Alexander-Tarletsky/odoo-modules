@@ -147,7 +147,7 @@ class Session(models.Model):
     @api.constrains('attendee_ids')
     def _check_attendee(self):
         """Validate that instructors cannot be attendees.
-        
+
         Raises:
             ValidationError: If any attendee is marked as an instructor.
         """
@@ -160,7 +160,7 @@ class Session(models.Model):
     @api.constrains('instructor_id')
     def _check_instructor(self):
         """Validate that the instructor is marked as an instructor.
-        
+
         Raises:
             ValidationError: If the instructor is not marked as an instructor.
         """
@@ -172,7 +172,7 @@ class Session(models.Model):
 
     def _get_company(self):
         """Get the current company from the environment.
-        
+
         Returns:
             res.company: The current company record.
         """

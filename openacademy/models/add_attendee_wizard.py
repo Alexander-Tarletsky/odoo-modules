@@ -21,7 +21,7 @@ class AddAttendeeWizard(models.TransientModel):
 
     def _default_sessions(self):
         """Get default sessions from the active context.
-        
+
         Returns:
             openacademy.session: Recordset of sessions from active_ids context.
         """
@@ -29,12 +29,12 @@ class AddAttendeeWizard(models.TransientModel):
 
     def add_attendee(self):
         """Add attendees to the selected sessions.
-        
+
         Validates that sessions have available seats before adding attendees.
-        
+
         Raises:
             ValidationError: If any session has no available seats.
-            
+
         Returns:
             dict: Empty dictionary to close the wizard.
         """

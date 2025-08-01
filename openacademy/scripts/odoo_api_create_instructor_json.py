@@ -38,14 +38,14 @@ class InstructorCreator:
 
     def json_rpc(self, method, params):
         """Send JSON-RPC request to Odoo server.
-        
+
         Args:
             method (str): The JSON-RPC method to call.
             params (dict): Parameters for the method call.
-            
+
         Returns:
             dict: The result from the JSON-RPC call.
-            
+
         Raises:
             Exception: If the response contains an error.
         """
@@ -67,12 +67,12 @@ class InstructorCreator:
 
     def call(self, service, method, *args):
         """Call Odoo service method with authentication.
-        
+
         Args:
             service (str): The service to call (common or object).
             method (str): The method to execute.
             *args: Additional arguments for the method.
-            
+
         Returns:
             dict: The result from the service call.
         """
@@ -87,10 +87,10 @@ class InstructorCreator:
 
     def _auth_uid(self):
         """Authenticate user and get user ID.
-        
+
         Returns:
             str: The authenticated user ID.
-            
+
         Raises:
             AttributeError: If authentication fails.
         """
@@ -107,7 +107,7 @@ class InstructorCreator:
 
     def category_id(self):
         """Get the teacher category ID.
-        
+
         Returns:
             list: List containing the teacher category ID, or False if not found.
         """
@@ -122,14 +122,14 @@ class InstructorCreator:
 
     def create_instructor(self, name, image):
         """Create a new instructor with the specified name and image.
-        
+
         Args:
             name (str): The name of the instructor.
             image (str): Path to the instructor's image file.
-            
+
         Returns:
             int: The ID of the created instructor.
-            
+
         Raises:
             OSError: If the image file path is invalid.
         """

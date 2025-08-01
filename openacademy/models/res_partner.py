@@ -26,13 +26,13 @@ class ResPartner(models.Model):
 
     def write(self, vals):
         """Override write method to handle instructor tag assignment.
-        
+
         When is_instructor field is updated, automatically assign or remove
         the teacher tag from the partner's category.
-        
+
         Args:
             vals (dict): Values to write to the record.
-            
+
         Returns:
             bool: Result of the parent write method.
         """
@@ -48,12 +48,12 @@ class ResPartner(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         """Override create method to handle instructor tag assignment.
-        
+
         Creates partner records and updates instructor tags if needed.
-        
+
         Args:
             vals_list (list): List of dictionaries with values for new records.
-            
+
         Returns:
             res.partner: Created partner records.
         """
@@ -63,7 +63,7 @@ class ResPartner(models.Model):
 
     def update_instructor_tag(self):
         """Update instructor tag for partners marked as instructors.
-        
+
         Assigns the teacher tag to partners who are marked as instructors.
         """
         for instructor in self:
@@ -73,7 +73,7 @@ class ResPartner(models.Model):
 
     def _get_company(self):
         """Get the current company ID from the environment.
-        
+
         Returns:
             int: The current company ID.
         """

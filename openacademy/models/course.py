@@ -130,7 +130,7 @@ class Course(models.Model):
 
     def _get_company(self):
         """Get the current company from the environment.
-        
+
         Returns:
             res.company: The current company record.
         """
@@ -138,10 +138,10 @@ class Course(models.Model):
 
     def copy(self, default=None):
         """Create a copy of the course with a unique title.
-        
+
         Args:
             default (dict, optional): Default values for the copy. Defaults to None.
-            
+
         Returns:
             openacademy.course: The copied course record.
         """
