@@ -84,8 +84,8 @@ class TestAddAttendeeWizard(TransactionCase):
             wizard.add_attendee()
         self.assertEqual(
             str(e_cm.exception),
-            "Error adding attendee. The number of seats for this session in the Test Course 1"
-            "programming course has been exceeded.",
+            f"Error adding attendee. The number of seats for this session in the "
+            f"{self.test_course.title} programming course has been exceeded.",
             "Wrong error message",
         )
 

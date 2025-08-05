@@ -43,8 +43,9 @@ class AddAttendeeWizard(models.TransientModel):
             if session.number_attendees >= session.seats:
                 raise exceptions.ValidationError(
                     self.env._(
-                        "Error adding attendee. The number of seats for this session in the "
-                        "%s programming course has been exceeded."
+                        "Error adding attendee. The number of seats for this session in the"
+                        " %s programming course has been exceeded.",
+                        session.course_id.title
                     )
                 )
             session.attendee_ids += self.attendee_ids

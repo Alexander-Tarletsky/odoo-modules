@@ -32,7 +32,7 @@ class TestCreateProductWizard(TransactionCase):
         self.test_wizard.model_id = self.test_model.id
         self.assertEqual(
             self.test_wizard.name,
-            "Test Manufacturer 1  Test Model Phone 1",
+            "Test Manufacturer 1 Test Model Phone 1",
             "Wrong name product",
         )
 
@@ -56,7 +56,7 @@ class TestCreateProductWizard(TransactionCase):
         self.test_wizard.create_product()
 
         product = self.env['product.product'].search([[
-            'name', '=', "Test Manufacturer 1  Test Model Phone 1"
+            'name', '=', "Test Manufacturer 1 Test Model Phone 1"
         ]])
         self.assertTrue(
             product,

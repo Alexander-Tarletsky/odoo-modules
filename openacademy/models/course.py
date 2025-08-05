@@ -149,7 +149,7 @@ class Course(models.Model):
         title = self.title
         list_title = self.search([('title', 'like', str(title) + '%')])
 
-        if list_title:
+        if len(list_title) > 1:
             title = f'Duplicate of {title} ({len(list_title)})'
         else:
             title = f'Duplicate of {title}'

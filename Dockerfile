@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y wget unzip && \
     apt-get purge -y wget unzip --auto-remove && \
     rm -rf /var/lib/apt/lists/*
 
+# This is necessary for testing multi_step_wizard.
+RUN pip install --break-system-packages odoo-test-helper
+
 USER odoo
 
 COPY ./openacademy /mnt/extra-addons/openacademy
