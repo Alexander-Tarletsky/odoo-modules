@@ -53,6 +53,12 @@ jobs:
       - name: Start services
         run: docker compose -f docker-compose.yaml up -d
 
+      - name: Download wait-for-it
+        run: curl -sL https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o wait-for-it.sh && chmod +x wait-for-it.sh
+
+      - name: Wait for db
+        run: ./wait-for-it.sh db:5432 --timeout=30 --strict -- echo "Postgres is ready"
+
       - name: Run Tests
         run: |
           docker compose exec web \
