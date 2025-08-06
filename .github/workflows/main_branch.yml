@@ -10,9 +10,6 @@ env:
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
   DB_NAME: ${{ secrets.DB_NAME }}
 
-#permissions:
-#  contents: read
-
 jobs:
   linters:
     name: Linters
@@ -33,41 +30,43 @@ jobs:
           pip install flake8 pylint pylint-odoo isort
  
       - name: Run flake8
-        run: flake8 ./openacademy ./mobilephones
+        run: flake8 --config .flake8 ./openacademy ./mobilephones
 
       - name: Run pylint
-        run: pylint --load-plugins=pylint_odoo --valid-odoo-versions=18.0 -e odoolint ./openacademy ./mobilephones
+        run: pylint --rcfile=.pylintrc --load-plugins=pylint_odoo --valid-odoo-versions=18.0 ./openacademy ./mobilephones
 
       - name: Run isort check
-        run: isort --check-only --diff ./openacademy ./mobilephones
+        run: isort --settings-file .isort.cfg --check-only --diff ./openacademy ./mobilephones
 
-  build_and_run:
-    name: Build and Start Containers
+  build_and_tests:
+    name: Build and Tests
     runs-on: ubuntu-latest
     needs: linters
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build and start Docker Compose
-        run: docker compose -f docker-compose.yaml up -d --build
+      - name: Build Odoo image
+        run: docker compose build
 
-      - name: Wait for services to start
-        run: sleep 10
+      - name: Start services
+        run: docker compose -f docker-compose.yaml up -d
 
-  run_tests:
-    name: Run Odoo Tests
-    runs-on: ubuntu-latest
-    needs: build_and_run
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Check Docker containers status
+        run: docker compose ps
 
-      - name: Run Odoo tests
+      - name: Check DB logs
+        run: docker compose logs db
+
+      # - name: Download wait-for-it
+      #   run: curl -sL https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o wait-for-it.sh && chmod +x wait-for-it.sh
+
+      # - name: Wait for db
+      #   run: ./wait-for-it.sh db:5432 --timeout=30 --strict -- echo "Postgres is ready"
+
+      - name: Run Tests
         run: |
-          docker compose exec web \
-            python3 odoo/odoo-bin \
-              -d odoo_test \
-              -i mobilephones,openacademy \
-              --test-tags /mobilephones,/openacademy \
-              --stop-after-init
+          docker compose run web odoo -d odoo_test -i mobilephones,openacademy \
+            --db_user=odoo --db_password=odoo --db_host=db --http-port=8068 \
+            --test-tags /mobilephones,/openacademy --stop-after-init

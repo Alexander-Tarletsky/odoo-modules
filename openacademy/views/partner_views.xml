@@ -6,11 +6,11 @@
             <field name="name">Instructor List</field>
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
-                <tree>
+                <list>
                     <field name="name"/>
                     <field name="category_id"/>
                     <field name="instructed_session_ids"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -23,8 +23,8 @@
                 <xpath expr="//notebook" position="inside">
                     <page string="Sessions">
                         <group>
-                            <field name="session_ids" attrs="{'invisible':[('is_instructor', '=', True)]}"/>
-                            <field name="instructed_session_ids" attrs="{'invisible':[('is_instructor', '!=', True)]}"/>
+                            <field name="session_ids" invisible="is_instructor == True"/>
+                            <field name="instructed_session_ids" invisible="is_instructor != True"/>
                         </group>
                     </page>
                 </xpath>
@@ -56,14 +56,14 @@
         <record id="attendee_session_list_action" model="ir.actions.act_window">
             <field name="name">Attendee</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="domain">[('is_instructor', '=', False), ('is_company', '=', False)]</field>
         </record>
 
         <record id="instructor_session_list_action" model="ir.actions.act_window">
             <field name="name">Instructors</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="view_id" ref="instructor_session_view_tree"/>
             <field name="domain">[('is_instructor', '=', True), ('is_company', '=', False)]</field>
         </record>
@@ -71,7 +71,7 @@
         <record id="contact_tags_list_action" model="ir.actions.act_window">
             <field name="name">Contact Tags</field>
             <field name="res_model">res.partner.category</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <!-- Menus -->

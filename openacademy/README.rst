@@ -1,1 +1,1 @@
-This is the Open Academy test module. It was created for training management.
+This is the Open Academy training module.

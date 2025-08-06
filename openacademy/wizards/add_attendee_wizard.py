@@ -1,4 +1,4 @@
-from odoo import fields, models, exceptions, _
+from odoo import exceptions, fields, models
 
 
 class AddAttendeeWizard(models.TransientModel):
@@ -20,16 +20,32 @@ class AddAttendeeWizard(models.TransientModel):
     )
 
     def _default_sessions(self):
+        """Get default sessions from the active context.
+
+        Returns:
+            openacademy.session: Recordset of sessions from active_ids context.
+        """
         return self.env['openacademy.session'].browse(self.env.context.get('active_ids'))
 
     def add_attendee(self):
+        """Add attendees to the selected sessions.
+
+        Validates that sessions have available seats before adding attendees.
+
+        Raises:
+            ValidationError: If any session has no available seats.
+
+        Returns:
+            dict: Empty dictionary to close the wizard.
+        """
 
         for session in self.session_ids:
             if session.number_attendees >= session.seats:
                 raise exceptions.ValidationError(
-                    _(
-                        "Error adding attendee. The number of seats for this session in the {}"
-                        "programming course has been exceeded.".format(session.course_id.title)
+                    self.env._(
+                        "Error adding attendee. The number of seats for this session in the"
+                        " %s programming course has been exceeded.",
+                        session.course_id.title
                     )
                 )
             session.attendee_ids += self.attendee_ids

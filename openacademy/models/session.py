@@ -1,5 +1,6 @@
-from datetime import timedelta, date
-from odoo import fields, models, api, exceptions, _
+from datetime import date, timedelta
+
+from odoo import api, exceptions, fields, models
 
 
 class Session(models.Model):
@@ -14,16 +15,20 @@ class Session(models.Model):
     color = fields.Integer()
 
     start_date = fields.Date(
-        string='Start Date',
-        default=lambda self: fields.datetime.now(),
+        default=lambda self: fields.Date.today(),
     )
 
-    seats = fields.Integer(string='Seats', required=True, default=10)
+    end_date = fields.Date(
+        compute='_compute_end_date',
+        inverse='_inverse_end_date',
+        store=True,
+    )
+
+    seats = fields.Integer(required=True, default=10)
     duration = fields.Integer(string='Duration of days')
 
     course_id = fields.Many2one(
         comodel_name='openacademy.course',
-        string='Course',
         ondelete='cascade',
         required=True,
     )
@@ -55,13 +60,6 @@ class Session(models.Model):
         store=True,
     )
 
-    end_date = fields.Date(
-        string='End Date',
-        compute='_compute_end_date',
-        inverse='_inverse_end_date',
-        store=True,
-    )
-
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -71,6 +69,11 @@ class Session(models.Model):
 
     @api.depends('seats', 'attendee_ids',)
     def _compute_taken_percentage(self):
+        """
+        Compute the percentage of seats occupied by attendees.
+        Calculates the occupancy rate as (number of attendees / total seats) * 100.
+        Sets taken_percentage to 0 if there are no attendees.
+        """
         for session in self:
             if len(session.attendee_ids) > 0:
                 occupancy = len(session.attendee_ids) / session.seats * 100
@@ -80,16 +83,28 @@ class Session(models.Model):
 
     @api.depends('start_date', 'duration',)
     def _compute_end_date(self):
+        """
+        Compute the end date based on start date and duration.
+        Calculates end_date as start_date + duration days.
+        """
         for session in self:
             session.end_date = session.start_date + timedelta(days=session.duration)
 
     def _inverse_end_date(self):
+        """
+        Set duration based on start_date and end_date.
+        Calculates duration as the difference between end_date and start_date in days.
+        """
         for session in self:
             duration = session.end_date - session.start_date
             session.duration = duration.days
 
     @api.depends('attendee_ids')
     def _compute_number_attendees(self):
+        """
+        Compute the total number of attendees for the session.
+        Sets number_attendees to the count of attendee_ids.
+        """
         for record in self:
             record.number_attendees = len(record.attendee_ids)
 
@@ -101,7 +116,7 @@ class Session(models.Model):
         for record in self:
             if record.seats < len(record.attendee_ids):
                 raise exceptions.UserError(
-                    _("Number of seats should be more than number of participants")
+                    self.env._("Number of seats should be more than number of participants")
                 )
 
     @api.onchange('end_date', 'duration', )
@@ -113,7 +128,7 @@ class Session(models.Model):
             duration = session.end_date - session.start_date
 
             if session.duration < 0 or duration.days < 0:
-                raise exceptions.UserError(_("Duration cannot be negative"))
+                raise exceptions.UserError(self.env._("Duration cannot be negative"))
 
     @api.onchange('attendee_ids')
     def _onchange_attendees(self):
@@ -121,28 +136,49 @@ class Session(models.Model):
         if not self.env.company.company_is_open:
             return {
                 'warning': {
-                    'title': _("This company is closed"),
-                    'message': _("You cannot change the number of participants in the sessions"),
+                    'title': self.env._("This company is closed"),
+                    'message': self.env._(
+                        "You cannot change the number of participants in the sessions"
+                    ),
                 }
             }
 
+        return {}
+
     @api.constrains('attendee_ids')
     def _check_attendee(self):
+        """Validate that instructors cannot be attendees.
+
+        Raises:
+            ValidationError: If any attendee is marked as an instructor.
+        """
         for record in self.attendee_ids:
             if record.is_instructor:
                 raise exceptions.ValidationError(
-                    _("Error adding session attendee! Instructor cannot be a attendee")
+                    self.env._("Error adding session attendee! Instructor cannot be a attendee")
                 )
 
     @api.constrains('instructor_id')
     def _check_instructor(self):
+        """Validate that the instructor is marked as an instructor.
+
+        Raises:
+            ValidationError: If the instructor is not marked as an instructor.
+        """
         for record in self.instructor_id:
             if not record.is_instructor:
                 raise exceptions.ValidationError(
-                    _("Error adding session instructor! This participant is not an instructor")
+                    self.env._(
+                        "Error adding session instructor! This participant is not an instructor"
+                    )
                 )
 
     def _get_company(self):
+        """Get the current company from the environment.
+
+        Returns:
+            res.company: The current company record.
+        """
         return self.env.company
 
     def notify_about_start_session(self):
@@ -161,4 +197,4 @@ class Session(models.Model):
                 context.update({'session': session, 'participants': ','.join(participants)})
 
                 mail_template = self.env.ref('openacademy.session_start_notification_email')
-                mail_template.with_context(context).send_mail(company.id, force_send=True)
+                mail_template.with_context(**context).send_mail(company.id, force_send=True)
